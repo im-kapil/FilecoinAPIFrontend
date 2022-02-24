@@ -19,8 +19,6 @@ app.get('/',(req,res) =>{
 
 app.post('/', async (req,res)=>
 {
-    try
-    {
         let filenamearray; 
         if(req.files){
         console.log(req.files) 
@@ -29,7 +27,7 @@ app.post('/', async (req,res)=>
         filenamearray = [filename];
         console.log("FileName", filename);
     
-        await file.mv(__dirname+"/"+filename, async (err) =>
+        file.mv(__dirname+"/"+filename, async (err) =>
         {
                 if(err)
             {
@@ -75,11 +73,6 @@ app.post('/', async (req,res)=>
                 `)
             }
         })  
-    }
-    }
-    catch(err)
-    {
-        console.log(err);
     }
 });
 
