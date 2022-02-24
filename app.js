@@ -64,10 +64,12 @@ app.post('/', async (req,res)=>
                 console.log("Files Varable", files);
                 try{ 
                         cid = await storage.put(files)
+                        console.log("Cid inside the try block", cid);
                     }
                 catch(err){
                     console.log(err);
                 }
+                console.log("CID outside the try block", cid);
                 
                 res.end
                 (`
