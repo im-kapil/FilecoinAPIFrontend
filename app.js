@@ -20,6 +20,7 @@ app.get('/',(req,res) =>{
 app.post('/', async (req,res)=>
 {
         let filenamearray; 
+        let cid
         if(req.files){
         console.log(req.files) 
         var file = req.files.file;
@@ -62,7 +63,7 @@ app.post('/', async (req,res)=>
                 res.write(`Uploading ${files.length} Files`);
                 console.log("Files Varable", files);
                 try{ 
-                        const cid = await storage.put(files)
+                        cid = await storage.put(files)
                     }
                 catch(err){
                     console.log(err);
