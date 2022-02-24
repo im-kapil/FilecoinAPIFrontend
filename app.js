@@ -29,12 +29,7 @@ app.post('/', async (req,res)=>
     
         file.mv(__dirname+"/"+filename, async (err) =>
         {
-                if(err)
-            {
-                res.send(err)
-            }
-
-            else
+            if(!err)
             {
                 const args = minimist(filenamearray)
                 const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEZhMDUzODEyNzlhOUU4MWQ0OTBDRjdGNDA5NDk5NTU4QzQ3QjM2MjciLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2NDI2NjA4NjY0ODgsIm5hbWUiOiJBUEkgVG9rZW4ifQ.9Mu4k2WiDIMLBFbUSflBB3JjWnqbHHr8qqcBQRSVCYc";
@@ -55,13 +50,23 @@ app.post('/', async (req,res)=>
                 
                 for (const path of args._) 
                 {
-                    const pathFiles = await getFilesFromPath(path)
-                    files.push(...pathFiles)
+                    try{ 
+                            const pathFiles = await getFilesFromPath(path)
+                            files.push(...pathFiles)
+                        }
+                    catch(err){
+                        console.log(error);
+                    }
                 }
 
                 res.write(`Uploading ${files.length} Files`);
                 console.log("Files Varable", files);
-                const cid = await storage.put(files)
+                try{ 
+                        const cid = await storage.put(files)
+                    }
+                catch(err){
+                    console.log(err);
+                }
                 
                 res.end
                 (`
@@ -71,6 +76,11 @@ app.post('/', async (req,res)=>
                 https://${cid}.ipfs.dweb.link 
 
                 `)
+            }
+
+            else
+            {
+                res.send(err);
             }
         })  
     }
